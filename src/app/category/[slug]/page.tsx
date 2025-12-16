@@ -118,7 +118,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   No tools yet
                 </h3>
                 <p className="mb-6 text-gray-600">
-                  We're currently curating the best {category.name.toLowerCase()} tools. Check back soon!
+                  We&#39;re currently curating the best {category.name.toLowerCase()} tools. Check back soon!
                 </p>
                 <a
                   href="/submit"

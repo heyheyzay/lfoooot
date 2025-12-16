@@ -19,7 +19,7 @@ export default function BlogPostPage() {
           <div className="mx-auto max-w-4xl px-6 py-24 text-center">
             <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">Post Not Found</h1>
             <p className="mb-8 text-gray-600 dark:text-gray-400">
-              The blog post you're looking for doesn't exist.
+              The blog post you&#39;re looking for doesn&#39;t exist.
             </p>
             <Link
               href="/blog"

@@ -292,7 +292,7 @@ export default function Home() {
                 Browse by Category
               </h2>
               <p className="text-gray-600">
-                Find exactly what you're looking for
+                Find exactly what you&#39;re looking for
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -307,7 +307,7 @@ export default function Home() {
         <section className="border-t border-gray-100 px-6 py-16 md:py-24 dark:border-gray-800 dark:bg-gray-900">
           <div className="mx-auto max-w-6xl text-center">
             <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl dark:text-white">
-              Can't find what you're looking for?
+              Can&#39;t find what you&#39;re looking for?
             </h2>
             <p className="mb-8 text-lg text-gray-600 dark:text-gray-400">
               Submit a tool and help grow the directory

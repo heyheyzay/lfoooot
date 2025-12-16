@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import SearchBar from '@/components/SearchBar';
@@ -40,12 +41,12 @@ function SearchResults({ query }: { query: string }) {
           <p className="mb-6 text-gray-600">
             Try adjusting your search terms or browse our categories
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block rounded-md bg-pitch-600 px-6 py-3 font-medium text-white hover:bg-pitch-700"
           >
             Back to Home
-          </a>
+          </Link>
         </div>
       )}
     </>
