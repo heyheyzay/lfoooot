@@ -18,15 +18,40 @@ export default function Home() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         {/* Hero Section */}
         <section className="px-6 py-24 md:py-32" style={{ background: 'linear-gradient(180deg, rgba(1, 62, 92, 1) 0%, rgba(81, 144, 189, 1) 51%, rgba(255, 255, 255, 1) 100%)' }}>
+          <style jsx>{`
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: translateY(20px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .hero-headline {
+              animation: fadeIn 1s ease-out forwards;
+            }
+            .hero-subheading {
+              animation: fadeIn 1s ease-out 0.3s forwards;
+              opacity: 0;
+            }
+            .hero-search {
+              animation: fadeIn 1s ease-out 0.6s forwards;
+              opacity: 0;
+            }
+          `}</style>
           <div className="mx-auto max-w-6xl">
             <div className="mx-auto max-w-3xl text-center">
-              <h1 className="mb-6 text-5xl font-bold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl">
+              <h1 className="hero-headline mb-6 text-5xl font-bold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl">
                 Everything Football, One Smart Directory
               </h1>
-              <p className="mb-10 text-lg text-white md:text-xl">
+              <p className="hero-subheading mb-10 text-lg text-white md:text-xl">
                 Discover the best curated tools for football fans, analysts, creators, and businesses. Updated weekly.
               </p>
-              <SearchBar large className="mx-auto max-w-2xl" placeholder="Search tools, teams, stats, streaming, analytics…" />
+              <div className="hero-search">
+                <SearchBar large className="mx-auto max-w-2xl" placeholder="Search tools, teams, stats, streaming, analytics…" />
+              </div>
             </div>
           </div>
         </section>
