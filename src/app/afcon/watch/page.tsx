@@ -136,6 +136,7 @@ const FANZONES: Fanzone[] = [
 ];
 
 export default function AfconWatchPage() {
+  const [activeTab, setActiveTab] = useState<'how' | 'where'>('how');
   const [selectedCity, setSelectedCity] = useState<string>('all');
 
   const groupedBroadcasters = BROADCASTERS.reduce((acc, broadcaster) => {
@@ -178,10 +179,36 @@ export default function AfconWatchPage() {
           </div>
         </section>
 
-        {/* Broadcasters Content */}
+        {/* Content */}
         <section className="px-6 py-12 md:py-16">
           <div className="mx-auto max-w-6xl">
-            <div className="mb-12 space-y-8">
+            {/* Tabs */}
+            <div className="mb-8 flex gap-2 border-b border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setActiveTab('how')}
+                className={`px-6 py-3 text-lg font-semibold transition-colors ${
+                  activeTab === 'how'
+                    ? 'border-b-2 border-[#E4F222] text-gray-900 dark:text-white'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                }`}
+              >
+                How
+              </button>
+              <button
+                onClick={() => setActiveTab('where')}
+                className={`px-6 py-3 text-lg font-semibold transition-colors ${
+                  activeTab === 'where'
+                    ? 'border-b-2 border-[#E4F222] text-gray-900 dark:text-white'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                }`}
+              >
+                Where
+              </button>
+            </div>
+
+            {/* How Tab - Broadcasters */}
+            {activeTab === 'how' && (
+              <div className="mb-12 space-y-8">
               {Object.entries(groupedBroadcasters).map(([region, broadcasters]) => (
                 <div key={region}>
                   <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">{region}</h2>
@@ -217,10 +244,12 @@ export default function AfconWatchPage() {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
 
-            {/* Fanzones Section */}
-            <div className="mb-12">
+            {/* Where Tab - Fanzones */}
+            {activeTab === 'where' && (
+              <div className="mb-12">
               <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-white">
                 Fanzones
               </h2>
@@ -277,7 +306,8 @@ export default function AfconWatchPage() {
                   </div>
                 ))}
               </div>
-            </div>
+              </div>
+            )}
 
             {/* Tips Section */}
             <div className="mb-12 rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800 md:p-8">
