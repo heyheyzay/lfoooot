@@ -68,6 +68,16 @@ const EVENTS: Event[] = [
     tags: ['music', 'culture', 'festival'],
     url: 'https://www.instagram.com/wecasablanca/',
   },
+  {
+    id: 'laftercan',
+    title: 'LAFTERCan',
+    description: 'AFCON afterparty events and celebrations in Rabat',
+    date: '2025-12-21',
+    location: 'Rabat',
+    city: 'Rabat',
+    tags: ['music', 'fan zone', 'festival'],
+    url: 'https://www.instagram.com/laftercan/',
+  },
 ];
 
 const ALL_TAGS = ['music', 'watch party', 'exhibition', 'culture', 'art', 'heritage', 'festival', 'opening ceremony', 'fan zone'];
