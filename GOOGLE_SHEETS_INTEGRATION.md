@@ -16,12 +16,12 @@ This guide will help you connect your Google Sheets spreadsheet to dynamically d
 
 **Best Practice:** Keep two separate spreadsheets:
 
-1. **Public Sheet** - "Footfolio Published Tools"
+1. **Public Sheet** - "lfoooot published tools"
    - This will be public and connected to your website
    - Only add tools you want live on the site
    - Safe to share, as all data will be visible on your website anyway
 
-2. **Private Sheet** - "Footfolio Working Draft"
+2. **Private Sheet** - "lfoooot working draft"
    - Keep this private for your internal use
    - Add notes, drafts, ideas, unpublished tools
    - When ready, copy rows to your Public Sheet
