@@ -99,11 +99,11 @@ const FANZONES: Fanzone[] = [
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=CFC+UM6SS+Casablanca',
   },
   {
-    id: 'espace-toto',
-    name: 'Espace Toto',
+    id: 'espace-toro',
+    name: 'Espace Toro',
     city: 'Casablanca',
-    location: 'Espace Toto, Casablanca',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Espace+Toto+Casablanca',
+    location: 'Espace Toro, Casablanca',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Espace+Toro+Casablanca',
   },
   {
     id: 'morocco-mall',

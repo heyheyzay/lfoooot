@@ -36,10 +36,6 @@ export default function Home() {
               animation: fadeIn 1s ease-out 0.3s forwards;
               opacity: 0;
             }
-            .hero-search {
-              animation: fadeIn 1s ease-out 0.6s forwards;
-              opacity: 0;
-            }
           `}</style>
           <div className="mx-auto max-w-6xl">
             <div className="mx-auto max-w-3xl text-center">
@@ -49,15 +45,12 @@ export default function Home() {
               <p className="hero-subheading mb-10 text-lg text-white md:text-xl">
                 Discover the best curated tools for football fans, analysts, creators, and businesses. Updated weekly.
               </p>
-              <div className="hero-search">
-                <SearchBar large className="mx-auto max-w-2xl" placeholder="Search tools, teams, stats, streaming, analytics…" />
-              </div>
             </div>
           </div>
         </section>
 
         {/* Football Action Marquee */}
-        <section className="overflow-hidden bg-white py-12 dark:bg-gray-900">
+        <section className="overflow-hidden bg-white py-4 dark:bg-gray-900">
           <style jsx>{`
             @keyframes scroll {
               0% { transform: translateX(0); }
