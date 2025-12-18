@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ToolCard from '@/components/ToolCard';
 import { getCategoryBySlug } from '@/lib/categories';
 import type { Metadata } from 'next';
+import type { Tool } from '@/types';
 import DataApiIcon from '@/components/icons/DataApiIcon';
 import NewsMediaIcon from '@/components/icons/NewsMediaIcon';
 import LiveScoreIcon from '@/components/icons/LiveScoreIcon';
@@ -70,7 +71,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   };
 }
 
-async function getToolsByCategory(categorySlug: string, categoryName: string) {
+async function getToolsByCategory(categorySlug: string, categoryName: string): Promise<Tool[]> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/tools`, {
       cache: 'no-store'
@@ -79,7 +80,7 @@ async function getToolsByCategory(categorySlug: string, categoryName: string) {
 
     if (data.data) {
       // Filter tools that match the category name or slug
-      return data.data.filter((tool: any) =>
+      return data.data.filter((tool: Tool) =>
         tool.categories.some((cat: string) =>
           cat.toLowerCase() === categoryName.toLowerCase() ||
           cat.toLowerCase() === categorySlug.toLowerCase() ||
