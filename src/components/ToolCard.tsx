@@ -35,19 +35,38 @@ export default function ToolCard({ tool, className }: ToolCardProps) {
             >
               {tool.pricing.charAt(0).toUpperCase() + tool.pricing.slice(1)}
             </span>
-            {tool.verified && (
+            {(tool as any).verified && (
               <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
                 ✓ Verified
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-1 text-sm text-gray-500">
-            <span className="text-yellow-400">★</span>
-            <span className="font-medium text-gray-900">{tool.rating}</span>
-            <span className="text-gray-400">·</span>
-            <span>{formatNumber(tool.reviewCount)} reviews</span>
-          </div>
+          {tool.rating && (
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              <span className="text-yellow-400">★</span>
+              <span className="font-medium text-gray-900">{tool.rating}</span>
+              {(tool as any).reviewCount && (
+                <>
+                  <span className="text-gray-400">·</span>
+                  <span>{formatNumber((tool as any).reviewCount)} reviews</span>
+                </>
+              )}
+            </div>
+          )}
+
+          {tool.platforms && tool.platforms.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {tool.platforms.slice(0, 3).map((platform) => (
+                <span
+                  key={platform}
+                  className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
+                >
+                  {platform}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </a>
