@@ -1,0 +1,21 @@
+{
+  "name": "Lfoooot - Everything Football, One Smart Directory",
+  "short_name": "Lfoooot",
+  "description": "Discover the best curated tools for football fans, analysts, creators, and businesses. Updated weekly.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#013E5C",
+  "icons": [
+    {
+      "src": "/Favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
