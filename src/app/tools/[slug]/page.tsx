@@ -39,7 +39,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
     notFound();
   }
 
-  const alternatives = tool.alternatives
+  const alternatives = (tool.alternatives || [])
     .map((id) => getToolById(id))
     .filter((t) => t !== undefined);
 
@@ -102,7 +102,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                           <span
                             key={i}
                             className={
-                              i < Math.floor(tool.rating)
+                              i < Math.floor(tool.rating || 0)
                                 ? 'text-yellow-400'
                                 : 'text-gray-300'
                             }
@@ -111,9 +111,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
                           </span>
                         ))}
                       </div>
-                      <span className="font-semibold text-gray-900">{tool.rating}</span>
+                      <span className="font-semibold text-gray-900">{tool.rating || 0}</span>
                       <span className="text-gray-500">
-                        ({formatNumber(tool.reviewCount)} reviews)
+                        ({formatNumber(tool.reviewCount || 0)} reviews)
                       </span>
                     </div>
                     {tool.externalRatings?.userCount && (
@@ -153,45 +153,53 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 </div>
 
                 {/* Features */}
-                <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
-                  <h2 className="mb-4 text-2xl font-bold text-gray-900">
-                    Key Features
-                  </h2>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {tool.features.map((feature, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="mt-1 text-pitch-600">✓</span>
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {tool.features && tool.features.length > 0 && (
+                  <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
+                    <h2 className="mb-4 text-2xl font-bold text-gray-900">
+                      Key Features
+                    </h2>
+                    <ul className="grid gap-3 sm:grid-cols-2">
+                      {tool.features.map((feature, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <span className="mt-1 text-pitch-600">✓</span>
+                          <span className="text-gray-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* Pros and Cons */}
-                <div className="mb-8 grid gap-6 sm:grid-cols-2">
-                  <div className="rounded-lg border border-gray-200 bg-white p-6">
-                    <h3 className="mb-4 font-semibold text-gray-900">Pros</h3>
-                    <ul className="space-y-2">
-                      {tool.pros.map((pro, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <span className="text-green-600">+</span>
-                          <span className="text-sm text-gray-700">{pro}</span>
-                        </li>
-                      ))}
-                    </ul>
+                {((tool.pros && tool.pros.length > 0) || (tool.cons && tool.cons.length > 0)) && (
+                  <div className="mb-8 grid gap-6 sm:grid-cols-2">
+                    {tool.pros && tool.pros.length > 0 && (
+                      <div className="rounded-lg border border-gray-200 bg-white p-6">
+                        <h3 className="mb-4 font-semibold text-gray-900">Pros</h3>
+                        <ul className="space-y-2">
+                          {tool.pros.map((pro, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <span className="text-green-600">+</span>
+                              <span className="text-sm text-gray-700">{pro}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {tool.cons && tool.cons.length > 0 && (
+                      <div className="rounded-lg border border-gray-200 bg-white p-6">
+                        <h3 className="mb-4 font-semibold text-gray-900">Cons</h3>
+                        <ul className="space-y-2">
+                          {tool.cons.map((con, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <span className="text-red-600">-</span>
+                              <span className="text-sm text-gray-700">{con}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                  <div className="rounded-lg border border-gray-200 bg-white p-6">
-                    <h3 className="mb-4 font-semibold text-gray-900">Cons</h3>
-                    <ul className="space-y-2">
-                      {tool.cons.map((con, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <span className="text-red-600">-</span>
-                          <span className="text-sm text-gray-700">{con}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                )}
 
                 {/* Alternatives */}
                 {alternatives.length > 0 && (
