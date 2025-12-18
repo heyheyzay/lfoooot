@@ -1,5 +1,6 @@
 import { Tool } from '@/types';
 import { cn, getPricingBadgeColor, formatNumber } from '@/lib/utils';
+import { ExternalLink } from 'lucide-react';
 
 interface ToolCardProps {
   tool: Tool;
@@ -20,8 +21,9 @@ export default function ToolCard({ tool, className }: ToolCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="mb-3">
-            <h3 className="mb-1 text-base font-semibold text-gray-900 group-hover:text-gray-700">
+            <h3 className="mb-1 flex items-center gap-1.5 text-base font-semibold text-gray-900 group-hover:text-gray-700">
               {tool.name}
+              <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
             </h3>
             <p className="text-sm text-gray-600 line-clamp-2">{tool.tagline}</p>
           </div>
