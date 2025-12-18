@@ -26,6 +26,7 @@ interface Tool {
 
 export default function Home() {
   const [featuredTools, setFeaturedTools] = useState<Tool[]>([]);
+  const [allTools, setAllTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function Home() {
         const data = await response.json();
 
         if (data.data) {
+          setAllTools(data.data);
           // Filter for featured tools only
           const featured = data.data.filter((tool: Tool) => tool.featured);
           setFeaturedTools(featured);
@@ -48,6 +50,19 @@ export default function Home() {
 
     fetchTools();
   }, []);
+
+  // Calculate tool counts per category
+  // Need to match both category name and slug since spreadsheet data is inconsistent
+  const categoriesWithCounts = CATEGORIES.map((category) => ({
+    ...category,
+    toolCount: allTools.filter((tool) =>
+      tool.categories.some(cat =>
+        cat.toLowerCase() === category.name.toLowerCase() ||
+        cat.toLowerCase() === category.slug.toLowerCase() ||
+        cat.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') === category.slug.toLowerCase()
+      )
+    ).length,
+  }));
 
   return (
     <>
@@ -105,32 +120,32 @@ export default function Home() {
           <div className="flex">
             <div className="marquee-content">
               {/* First set of images */}
-              <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=240&h=300&fit=crop" alt="Football action" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=240&h=300&fit=crop" alt="Morocco football" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?w=240&h=300&fit=crop" alt="Football celebration" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=240&h=300&fit=crop" alt="Football match" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=240&h=300&fit=crop" alt="Football stadium" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=240&h=300&fit=crop" alt="Morocco team" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=240&h=300&fit=crop" alt="Football goal" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=240&h=300&fit=crop" alt="Football players" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=240&h=300&fit=crop" alt="Football action shot" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1577223625816-7546f36921cd?w=240&h=300&fit=crop" alt="Football skills" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=240&h=300&fit=crop" alt="Football game" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=240&h=300&fit=crop" alt="Football moment" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://e00-marca.uecdn.es/assets/multimedia/imagenes/2023/12/20/17030339180110.png" alt="Football action" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://cdn.slowdownwiseup.co.uk/media/original_images/77673.jpeg" alt="Football match" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://assets.goal.com/images/v3/bltfe702ed2d5d6a410/bltfe702ed2d5d6a410.jpg?auto=webp&format=pjpg&width=3840&quality=60" alt="Football celebration" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.aljazeera.com/wp-content/uploads/2022/12/RTSE0MDE.jpg?resize=770%2C513&quality=80" alt="Morocco World Cup" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://pzpn.pl/public/system/images/articles/9916/13761-zoom.jpg?ts=9258fa58de0b1d58a052a5ca6f801f36" alt="Football team" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.iffhs.com/storage/img/posts/IMG_8835.jpg" alt="Football stadium" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://s.france24.com/media/display/ce64dc6e-9578-11ef-aaf6-005056a97e36/w:1280/p:16x9/000_36L49AQ.jpg" alt="Football celebration" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://ichef.bbci.co.uk/ace/standard/2560/cpsprodpb/527e/live/e550f570-4280-11ef-96a8-e710c6bfc866.jpg" alt="Football moment" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.aljazeera.com/wp-content/uploads/2024/07/2023-08-15T000000Z_1505922455_UP1EJ8F0SM7BX_RTRMADP_3_SOCCER-WORLDCUP-ESP-SWE-REPORT-1721113556.jpg?resize=770%2C513&quality=80" alt="Women's football" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.moroccoworldnews.com/wp-content/uploads/2025/03/WhatsApp-Image-2025-03-06-at-1.25.16-PM-1140x815.webp" alt="Morocco football" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.mancity.com/meta/media/utxp4ukc/erling-review.jpg?width=1620" alt="Premier League action" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://media.cnn.com/api/v1/images/stellar/prod/221216085015-01-world-cup-memorable-moments.jpg?c=original" alt="World Cup moment" className="h-[300px] w-[240px] rounded-lg object-cover" />
 
               {/* Duplicate set for seamless loop */}
-              <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=240&h=300&fit=crop" alt="Football action" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=240&h=300&fit=crop" alt="Morocco football" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?w=240&h=300&fit=crop" alt="Football celebration" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=240&h=300&fit=crop" alt="Football match" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=240&h=300&fit=crop" alt="Football stadium" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=240&h=300&fit=crop" alt="Morocco team" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=240&h=300&fit=crop" alt="Football goal" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=240&h=300&fit=crop" alt="Football players" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=240&h=300&fit=crop" alt="Football action shot" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1577223625816-7546f36921cd?w=240&h=300&fit=crop" alt="Football skills" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=240&h=300&fit=crop" alt="Football game" className="h-[300px] w-[240px] rounded-lg object-cover" />
-              <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=240&h=300&fit=crop" alt="Football moment" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://e00-marca.uecdn.es/assets/multimedia/imagenes/2023/12/20/17030339180110.png" alt="Football action" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://cdn.slowdownwiseup.co.uk/media/original_images/77673.jpeg" alt="Football match" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://assets.goal.com/images/v3/bltfe702ed2d5d6a410/bltfe702ed2d5d6a410.jpg?auto=webp&format=pjpg&width=3840&quality=60" alt="Football celebration" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.aljazeera.com/wp-content/uploads/2022/12/RTSE0MDE.jpg?resize=770%2C513&quality=80" alt="Morocco World Cup" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://pzpn.pl/public/system/images/articles/9916/13761-zoom.jpg?ts=9258fa58de0b1d58a052a5ca6f801f36" alt="Football team" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.iffhs.com/storage/img/posts/IMG_8835.jpg" alt="Football stadium" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://s.france24.com/media/display/ce64dc6e-9578-11ef-aaf6-005056a97e36/w:1280/p:16x9/000_36L49AQ.jpg" alt="Football celebration" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://ichef.bbci.co.uk/ace/standard/2560/cpsprodpb/527e/live/e550f570-4280-11ef-96a8-e710c6bfc866.jpg" alt="Football moment" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.aljazeera.com/wp-content/uploads/2024/07/2023-08-15T000000Z_1505922455_UP1EJ8F0SM7BX_RTRMADP_3_SOCCER-WORLDCUP-ESP-SWE-REPORT-1721113556.jpg?resize=770%2C513&quality=80" alt="Women's football" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.moroccoworldnews.com/wp-content/uploads/2025/03/WhatsApp-Image-2025-03-06-at-1.25.16-PM-1140x815.webp" alt="Morocco football" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://www.mancity.com/meta/media/utxp4ukc/erling-review.jpg?width=1620" alt="Premier League action" className="h-[300px] w-[240px] rounded-lg object-cover" />
+              <img src="https://media.cnn.com/api/v1/images/stellar/prod/221216085015-01-world-cup-memorable-moments.jpg?c=original" alt="World Cup moment" className="h-[300px] w-[240px] rounded-lg object-cover" />
             </div>
           </div>
         </section>
@@ -329,15 +344,15 @@ export default function Home() {
         <section className="px-6 py-16 md:py-24 dark:bg-gray-900">
           <div className="mx-auto max-w-6xl">
             <div className="mb-12">
-              <h2 className="mb-2 text-3xl font-bold text-gray-900 md:text-4xl">
+              <h2 className="mb-2 text-3xl font-bold text-gray-900 md:text-4xl dark:text-white">
                 Browse by Category
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Find exactly what you&#39;re looking for
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {CATEGORIES.map((category) => (
+              {categoriesWithCounts.map((category) => (
                 <CategoryCard key={category.id} category={category} />
               ))}
             </div>

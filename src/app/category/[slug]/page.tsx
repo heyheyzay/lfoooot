@@ -4,7 +4,6 @@ import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import ToolCard from '@/components/ToolCard';
 import { getCategoryBySlug } from '@/lib/categories';
-import { getToolsByCategory } from '@/lib/mockData';
 import type { Metadata } from 'next';
 import DataApiIcon from '@/components/icons/DataApiIcon';
 import NewsMediaIcon from '@/components/icons/NewsMediaIcon';
@@ -71,6 +70,30 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   };
 }
 
+async function getToolsByCategory(categorySlug: string, categoryName: string) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/tools`, {
+      cache: 'no-store'
+    });
+    const data = await response.json();
+
+    if (data.data) {
+      // Filter tools that match the category name or slug
+      return data.data.filter((tool: any) =>
+        tool.categories.some((cat: string) =>
+          cat.toLowerCase() === categoryName.toLowerCase() ||
+          cat.toLowerCase() === categorySlug.toLowerCase() ||
+          cat.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') === categorySlug.toLowerCase()
+        )
+      );
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching tools:', error);
+    return [];
+  }
+}
+
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
   const category = getCategoryBySlug(slug);
@@ -79,7 +102,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const tools = getToolsByCategory(category.id);
+  const tools = await getToolsByCategory(category.slug, category.name);
 
   return (
     <>

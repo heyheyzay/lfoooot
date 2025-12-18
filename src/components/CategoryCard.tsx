@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Category } from '@/types';
 import { cn } from '@/lib/utils';
-import { getToolsByCategory } from '@/lib/mockData';
 import DataApiIcon from './icons/DataApiIcon';
 import NewsMediaIcon from './icons/NewsMediaIcon';
 import LiveScoreIcon from './icons/LiveScoreIcon';
@@ -52,7 +51,8 @@ const getCategoryIcon = (categoryId: string, icon: string) => {
 };
 
 export default function CategoryCard({ category, className }: CategoryCardProps) {
-  const toolCount = getToolsByCategory(category.id).length;
+  // Use the toolCount passed from the parent component
+  const toolCount = category.toolCount || 0;
 
   return (
     <Link

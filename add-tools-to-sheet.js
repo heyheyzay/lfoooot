@@ -1,8 +1,15 @@
 const https = require('https');
 const fs = require('fs');
+require('dotenv').config();
 
-const SPREADSHEET_ID = '1aFl5gHiVG-Ahrsil9TDY1GkGf1r3RmtjF3uvrW6ZOrc';
-const API_KEY = 'AIzaSyA_-BCrRf91OvMb5vunSsMFjPiKbi_6cVE';
+const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
+
+if (!SPREADSHEET_ID || !API_KEY) {
+  console.error('Error: Missing required environment variables');
+  console.error('Please set GOOGLE_SHEETS_SPREADSHEET_ID and GOOGLE_SHEETS_API_KEY in your .env file');
+  process.exit(1);
+}
 
 // Read the JSON data
 const tools = JSON.parse(fs.readFileSync('./football-tools-data.json', 'utf8'));
