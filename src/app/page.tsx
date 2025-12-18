@@ -1,16 +1,53 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import SearchBar from '@/components/SearchBar';
 import CategoryCard from '@/components/CategoryCard';
 import ToolCard from '@/components/ToolCard';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { CATEGORIES } from '@/lib/categories';
-import { getFeaturedTools, MOCK_TOOLS } from '@/lib/mockData';
+
+interface Tool {
+  id: string;
+  name: string;
+  slug: string;
+  tagline: string;
+  description: string;
+  websiteUrl: string;
+  categories: string[];
+  tags: string[];
+  pricing: string;
+  platforms: string[];
+  rating: number;
+  featured: boolean;
+}
 
 export default function Home() {
-  const featuredTools = getFeaturedTools();
+  const [featuredTools, setFeaturedTools] = useState<Tool[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTools() {
+      try {
+        const response = await fetch('/api/tools');
+        const data = await response.json();
+
+        if (data.data) {
+          // Filter for featured tools only
+          const featured = data.data.filter((tool: Tool) => tool.featured);
+          setFeaturedTools(featured);
+        }
+      } catch (error) {
+        console.error('Error fetching tools:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTools();
+  }, []);
 
   return (
     <>
@@ -270,9 +307,20 @@ export default function Home() {
               </Link>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {featuredTools.slice(0, 6).map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-              ))}
+              {loading ? (
+                // Loading state
+                Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="h-64 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"></div>
+                ))
+              ) : featuredTools.length > 0 ? (
+                featuredTools.slice(0, 6).map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))
+              ) : (
+                <div className="col-span-full text-center text-gray-500 dark:text-gray-400">
+                  No featured tools available yet.
+                </div>
+              )}
             </div>
           </div>
         </section>
