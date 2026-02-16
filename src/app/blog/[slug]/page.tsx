@@ -2,9 +2,9 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
+import PageLayout from '@/components/PageLayout';
 import { getBlogPostBySlug } from '@/lib/blogData';
+import { formatDate } from '@/lib/utils';
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -13,8 +13,7 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <>
-        <Navigation />
+      <PageLayout>
         <main className="min-h-screen bg-white dark:bg-gray-900">
           <div className="mx-auto max-w-4xl px-6 py-24 text-center">
             <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">Post Not Found</h1>
@@ -29,26 +28,14 @@ export default function BlogPostPage() {
             </Link>
           </div>
         </main>
-        <Footer />
-      </>
+      </PageLayout>
     );
   }
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date);
-  };
-
   return (
-    <>
-      <Navigation />
+    <PageLayout>
       <main className="min-h-screen bg-white dark:bg-gray-900">
-        {/* Article Header */}
         <article className="mx-auto max-w-4xl px-6 py-16 md:py-24">
-          {/* Back Link */}
           <Link
             href="/blog"
             className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
@@ -59,22 +46,19 @@ export default function BlogPostPage() {
             Back to Blog
           </Link>
 
-          {/* Featured Badge */}
           {post.featured && (
             <span className="mb-4 inline-block rounded-full bg-[#e4e24e] px-4 py-1.5 text-sm font-semibold text-black">
               Featured Article
             </span>
           )}
 
-          {/* Title */}
           <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 md:text-5xl dark:text-white">
             {post.title}
           </h1>
 
-          {/* Meta Information */}
           <div className="mb-8 flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+              <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700" />
               <span className="font-medium">{post.author}</span>
             </div>
             <span>•</span>
@@ -83,16 +67,10 @@ export default function BlogPostPage() {
             <span>{post.readTime} min read</span>
           </div>
 
-          {/* Cover Image */}
           <div className="mb-12 overflow-hidden rounded-lg">
-            <img
-              src={post.coverImage}
-              alt={post.title}
-              className="h-auto w-full object-cover"
-            />
+            <img src={post.coverImage} alt={post.title} className="h-auto w-full object-cover" />
           </div>
 
-          {/* Content */}
           <div className="prose prose-lg dark:prose-invert max-w-none">
             {post.content.split('\n\n').map((paragraph, index) => {
               if (paragraph.startsWith('## ')) {
@@ -110,22 +88,17 @@ export default function BlogPostPage() {
             })}
           </div>
 
-          {/* Tags */}
           <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
             <h3 className="mb-4 text-sm font-semibold text-gray-900 dark:text-white">Tags</h3>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                >
+                <span key={tag} className="rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                   {tag}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Navigation */}
           <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
             <Link
               href="/blog"
@@ -139,7 +112,6 @@ export default function BlogPostPage() {
           </div>
         </article>
       </main>
-      <Footer />
-    </>
+    </PageLayout>
   );
 }

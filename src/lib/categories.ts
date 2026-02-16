@@ -118,3 +118,30 @@ export function getCategoryBySlug(slug: string): Category | undefined {
 export function getCategoryById(id: string): Category | undefined {
   return CATEGORIES.find((cat) => cat.id === id);
 }
+
+export function matchesCategory(toolCategory: string, category: Category): boolean {
+  const normalized = toolCategory.toLowerCase();
+  return (
+    normalized === category.name.toLowerCase() ||
+    normalized === category.slug.toLowerCase() ||
+    normalized.replace(/\s+/g, '-').replace(/&/g, '') === category.slug.toLowerCase()
+  );
+}
+
+export function filterToolsByCategory<T extends { categories: string[] }>(
+  tools: T[],
+  category: Category
+): T[] {
+  return tools.filter((tool) =>
+    tool.categories.some((cat) => matchesCategory(cat, category))
+  );
+}
+
+export function getCategoriesWithCounts<T extends { categories: string[] }>(
+  tools: T[]
+): (Category & { toolCount: number })[] {
+  return CATEGORIES.map((category) => ({
+    ...category,
+    toolCount: filterToolsByCategory(tools, category).length,
+  }));
+}

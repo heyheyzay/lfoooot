@@ -1,26 +1,10 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
+import type { Tool } from '@/types';
 
-// Cache configuration
-const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
-let cachedData: any = null;
+const CACHE_DURATION = 15 * 60 * 1000;
+let cachedData: Tool[] | null = null;
 let cacheTimestamp: number = 0;
-
-// Tool interface
-interface Tool {
-  id: string;
-  name: string;
-  slug: string;
-  tagline: string;
-  description: string;
-  websiteUrl: string;
-  categories: string[];
-  tags: string[];
-  pricing: 'free' | 'freemium' | 'paid' | 'enterprise';
-  platforms: string[];
-  rating: number;
-  featured: boolean;
-}
 
 async function fetchFromGoogleSheets(): Promise<Tool[]> {
   try {
@@ -93,10 +77,9 @@ export async function GET() {
       cached: false,
       cacheAge: 0,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('API Error:', error);
 
-    // If we have cached data, return it even if it's stale
     if (cachedData) {
       return NextResponse.json({
         data: cachedData,
@@ -107,7 +90,7 @@ export async function GET() {
     }
 
     return NextResponse.json(
-      { error: 'Failed to fetch tools', details: error.message },
+      { error: 'Failed to fetch tools', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

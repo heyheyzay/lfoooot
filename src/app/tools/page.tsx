@@ -3,24 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ToolCard from '@/components/ToolCard';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import { CATEGORIES } from '@/lib/categories';
-
-interface Tool {
-  id: string;
-  name: string;
-  slug: string;
-  tagline: string;
-  description: string;
-  websiteUrl: string;
-  categories: string[];
-  tags: string[];
-  pricing: string;
-  platforms: string[];
-  rating: number;
-  featured: boolean;
-}
+import PageLayout from '@/components/PageLayout';
+import { CATEGORIES, matchesCategory } from '@/lib/categories';
+import type { Tool } from '@/types';
 
 export default function ToolsPage() {
   const [allTools, setAllTools] = useState<Tool[]>([]);
@@ -72,13 +57,10 @@ export default function ToolsPage() {
     );
   };
 
-  const clearFilters = () => {
-    setSelectedCategories([]);
-  };
+  const clearFilters = () => setSelectedCategories([]);
 
   return (
-    <>
-      <Navigation />
+    <PageLayout>
       <div className="min-h-screen bg-white dark:bg-gray-950">
         {/* Breadcrumbs */}
         <div className="border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
@@ -102,7 +84,6 @@ export default function ToolsPage() {
         </div>
 
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          {/* Header */}
           <div className="mb-8">
             <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
               All Football Tools
@@ -112,87 +93,71 @@ export default function ToolsPage() {
             </p>
           </div>
 
-        {/* Category Filters */}
-        <div className="mb-8">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Filter by Category
-            </h2>
-            {selectedCategories.length > 0 && (
-              <button
-                onClick={clearFilters}
-                className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                Clear all
-              </button>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((category) => {
-              const isSelected = selectedCategories.includes(category.name);
-              const toolCount = allTools.filter((tool) =>
-                tool.categories.some(cat =>
-                  cat.toLowerCase() === category.name.toLowerCase() ||
-                  cat.toLowerCase() === category.slug.toLowerCase() ||
-                  cat.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '') === category.slug.toLowerCase()
-                )
-              ).length;
+          {/* Category Filters */}
+          <div className="mb-8">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Filter by Category
+              </h2>
+              {selectedCategories.length > 0 && (
+                <button onClick={clearFilters} className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                  Clear all
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map((category) => {
+                const isSelected = selectedCategories.includes(category.name);
+                const toolCount = allTools.filter((tool) =>
+                  tool.categories.some(cat => matchesCategory(cat, category))
+                ).length;
 
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => toggleCategory(category.name)}
-                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                    isSelected
-                      ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  <span>{category.icon}</span>
-                  <span>{category.name}</span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
+                return (
+                  <button
+                    key={category.id}
+                    onClick={() => toggleCategory(category.name)}
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                      isSelected
+                        ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <span>{category.icon}</span>
+                    <span>{category.name}</span>
+                    <span className={`rounded-full px-2 py-0.5 text-xs ${
                       isSelected
                         ? 'bg-blue-700 text-white dark:bg-blue-600'
                         : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
-                    }`}
-                  >
-                    {toolCount}
-                  </span>
+                    }`}>
+                      {toolCount}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Tools Grid */}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {loading ? (
+              Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="h-64 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
+              ))
+            ) : filteredTools.length > 0 ? (
+              filteredTools.map((tool) => <ToolCard key={tool.id} tool={tool} />)
+            ) : (
+              <div className="col-span-full py-12 text-center">
+                <p className="text-gray-500 dark:text-gray-400">
+                  No tools found for the selected categories.
+                </p>
+                <button onClick={clearFilters} className="mt-4 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                  Clear filters
                 </button>
-              );
-            })}
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Tools Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {loading ? (
-            Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-64 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800"
-              ></div>
-            ))
-          ) : filteredTools.length > 0 ? (
-            filteredTools.map((tool) => <ToolCard key={tool.id} tool={tool} />)
-          ) : (
-            <div className="col-span-full py-12 text-center">
-              <p className="text-gray-500 dark:text-gray-400">
-                No tools found for the selected categories.
-              </p>
-              <button
-                onClick={clearFilters}
-                className="mt-4 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
-        </div>
-        </div>
       </div>
-      <Footer />
-    </>
+    </PageLayout>
   );
 }
